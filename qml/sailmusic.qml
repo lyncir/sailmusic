@@ -30,25 +30,28 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import io.thp.pyotherside 1.4
+
 
 ApplicationWindow
 {
     Image {
-        id: wheel
+        id: image
 
         anchors.centerIn: parent
-        source: "images/pinwheel.png"
 
-        Behavior on rotation {
-            NumberAnimation {
-                duration: 250
+
+        Python {
+            Component.onCompleted: {
+                addImportPath(Qt.resolvedUrl('.'));
+
+                importModule('sailmusic', function() {
+                    image.source = 'image://python/pinwheel.png';
+                });
             }
-        }
-    }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: wheel.rotation += 90
+            onError: console.log('Python error: ' + traceback)
+        }
     }
 }
 

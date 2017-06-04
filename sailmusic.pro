@@ -17,7 +17,10 @@ CONFIG += sailfishapp
 SOURCES +=
 
 OTHER_FILES += qml/sailmusic.qml \
+    qml/sailmusic.py \
     rpm/sailmusic.changes.in \
     rpm/sailmusic.spec \
     rpm/sailmusic.yaml \
     sailmusic.desktop
+
+SAILFISHAPP_ICONS = 86x86 108x108 128x128 256x256

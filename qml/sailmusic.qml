@@ -30,11 +30,25 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "pages"
 
 ApplicationWindow
 {
-    initialPage: Component { FirstPage { } }
-    allowedOrientations: defaultAllowedOrientations
+    Image {
+        id: wheel
+
+        anchors.centerIn: parent
+        source: "images/pinwheel.png"
+
+        Behavior on rotation {
+            NumberAnimation {
+                duration: 250
+            }
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: wheel.rotation += 90
+    }
 }
 

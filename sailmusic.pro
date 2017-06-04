@@ -17,7 +17,6 @@ CONFIG += sailfishapp
 SOURCES +=
 
 OTHER_FILES += qml/sailmusic.qml \
-    qml/pages/FirstPage.qml \
     rpm/sailmusic.changes.in \
     rpm/sailmusic.spec \
     rpm/sailmusic.yaml \

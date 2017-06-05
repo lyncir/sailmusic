@@ -21,7 +21,8 @@ URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  sailmusic.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
-Requires:   pyotherside-qml-plugin-python3-qt5
+Requires:   python3-base
+Requires:   python3-devel
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)

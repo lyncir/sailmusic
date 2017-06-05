@@ -12,7 +12,7 @@
 # The name of your application
 TARGET = sailmusic
 
-CONFIG += sailfishapp
+CONFIG += sailfishapp_qml
 
 SOURCES +=
 

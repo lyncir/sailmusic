@@ -2,5 +2,5 @@
 Type=Application
 X-Nemo-Application-Type=silica-qt5
 Icon=sailmusic
-Exec=sailmusic
+Exec=sailfish-qml sailmusic
 Name=sailmusic

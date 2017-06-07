@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-X-Nemo-Application-Type=silica-qt5
-Icon=sailmusic
-Exec=sailfish-qml sailmusic
-Name=sailmusic

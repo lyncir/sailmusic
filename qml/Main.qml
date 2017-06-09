@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import io.thp.pyotherside 1.4
+import QtMultimedia 5.5
 
 Page {
 	id: main
@@ -9,6 +10,17 @@ Page {
 		id: wlan0
 
 		text: "WLAN: "
+	}
+
+	Text {
+		text: "Click Me!"
+		y: wlan0.height
+		color: "#FFFFFF"
+	}
+
+	MediaPlayer {
+		id: playMusic	
+		source: "../src/media/Angel.mp3"
 	}
 
     Image {
@@ -27,6 +39,7 @@ Page {
 	MouseArea {
 		anchors.fill: parent
 		onClicked: wheel.rotation += 90
+		onPressed: { playMusic.play() }
 	}
 
 	Python {

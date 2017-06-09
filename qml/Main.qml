@@ -6,9 +6,9 @@ Page {
 	id: main
 
 	Label {
-		id: ip
+		id: wlan0
 
-		text: "IP: ip"
+		text: "WLAN: "
 	}
 
     Image {
@@ -41,7 +41,7 @@ Page {
 			}
 
 			setHandler('ip_address', function(newvalue) {
-				ip.text = "IP: " + newvalue;	
+				wlan0.text = "WLAN: " + newvalue;	
 			});
 
 			importModule('main', function() {

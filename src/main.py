@@ -39,7 +39,6 @@ def get_ip_address(ifname):
 
     :param ifname: 网络接口名
     """
-    ip_addr = None
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         ip_addr = socket.inet_ntoa(fcntl.ioctl(
@@ -47,9 +46,16 @@ def get_ip_address(ifname):
             0x8915,  # SIOCGIFADDR 获取接口地址
             struct.pack('256s', ifname[:15])
         )[20:24])
+    except OSError as e:
+        if e.errno == 19:
+            ip_addr = 'Device Not Found'
+        elif e.errno == 99:
+            ip_addr = 'Disconnected'
+        else:
+            ip_addr = 'OSError'
     except:
+        ip_addr = 'Error. See log!'
         logging.info(traceback.format_exc())
-    logging.info("ip: {}".format(ip_addr))
     return ip_addr
 
 
@@ -57,4 +63,4 @@ pyotherside.send("ip_address", get_ip_address(b"wlan0"))
 
 
 if __name__ == '__main__':
-    print(get_ip_address(b"lo"))
+    print(get_ip_address(b"wlan0"))

@@ -1,2 +1,3 @@
 *.pyc
 /*.pro.user
+*.log

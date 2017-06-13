@@ -62,9 +62,28 @@ def login(username, password):
     print(connection.text)
 
 
+# 搜索单曲(1)，歌手(100)，专辑(10)，歌单(1000)，用户(1002) *(type)*
+@asyncio.coroutine
+def search(s, stype=1, offset=0, total='true', limit=60):
+    action = 'http://music.163.com/api/search/get'
+    data = {
+        's': s,
+        'type': stype,
+        'offset': offset,
+        'total': total,
+        'limit': limit
+    }
+    connection = session.post(action,
+                              data=data,
+                              headers=header,
+                              timeout=timeout)
+    print(connection.text)
+
+
 def main():
     loop = asyncio.get_event_loop()
-    result = loop.run_until_complete(login(username, password))
+    # result = loop.run_until_complete(login(username, password))
+    result = loop.run_until_complete(search("gravityWall"))
     loop.close()
 
 

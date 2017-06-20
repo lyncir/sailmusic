@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
-import re
-import time
+import json
 import asyncio
 import requests
-import traceback
-from http.cookiejar import LWPCookieJar
-
-import utils
 
 
 header = {
@@ -23,43 +17,22 @@ header = {
 }
 
 timeout = 10
-cookies = {'appver': '1.5.2'}
 session = requests.Session()
-cookie_path = "cookie"
-session.cookies = LWPCookieJar(cookie_path)
-
-try:
-    session.cookies.load()
-    cookie = ''
-    if os.path.isfile(cookie_path):
-        f = open(cookie_path, 'r')
-        cookie = f.read()
-        f.close()
-    expire_time = re.compile(r'\d{4}-\d{2}-\d{2}').findall(cookie)
-    if expire_time:
-        if expire_time[0] < time.strftime('%Y-%m-%d', time.localtime(time.time())):
-            os.remove(cookie_path)
-except IOError as e:
-    print(traceback.format_exc())
-    session.cookies.save()
 
 
-# 登录
 @asyncio.coroutine
-def login(username, password):
-    action = 'https://music.163.com/weapi/login?csrf_token='
-    text = {
-        'username': username,
-        'password': password,
-        'rememberLogin': 'true'
-    }
-    data = utils.encrypted_request(text)
-    connection = session.post(action,
-                              data=data,
-                              headers=header,
-                              timeout=timeout)
-    print(connection, type(connection))
-    print(connection.text)
+def http_request(method, session, url, data, **kwargs):
+    loop = asyncio.get_event_loop()
+    if method == 'POST':
+        future = loop.run_in_executor(None, session.post, url, data, kwargs)
+        connection = yield from future
+
+    elif method == 'GET':
+        future = loop.run_in_executor(None, session.get, url, data, kwargs)
+        connection = yield from future
+
+    connection.encoding = 'UTF-8'
+    return connection.text
 
 
 # 搜索单曲(1)，歌手(100)，专辑(10)，歌单(1000)，用户(1002) *(type)*
@@ -73,11 +46,15 @@ def search(s, stype=1, offset=0, total='true', limit=60):
         'total': total,
         'limit': limit
     }
-    connection = session.post(action,
-                              data=data,
-                              headers=header,
-                              timeout=timeout)
-    print(connection.text)
+    connection = yield from http_request('POST',
+                                         session,
+                                         action,
+                                         data=data,
+                                         headers=header,
+                                         timeout=timeout)
+
+    result = json.loads(connection)
+    return result
 
 
 def main():

@@ -21,14 +21,14 @@ session = requests.Session()
 
 
 @asyncio.coroutine
-def http_request(method, session, url, data, **kwargs):
+def http_request(method, session, url, data=None, **kwargs):
     loop = asyncio.get_event_loop()
     if method == 'POST':
         future = loop.run_in_executor(None, session.post, url, data, kwargs)
         connection = yield from future
 
     elif method == 'GET':
-        future = loop.run_in_executor(None, session.get, url, data, kwargs)
+        future = loop.run_in_executor(None, session.get, url)
         connection = yield from future
 
     connection.encoding = 'UTF-8'
@@ -57,10 +57,23 @@ def search(s, stype=1, offset=0, total='true', limit=60):
     return result
 
 
+@asyncio.coroutine
+def song_detail(music_id):
+    action = 'http://music.163.com/api/song/detail/?id={}&ids=[{}]'.format(
+            music_id, music_id)
+    connection = yield from http_request('GET',
+                                         session,
+                                         action)
+    print(connection)
+    print(type(connection))
+    result = json.loads(connection)
+    return result
+
+
 def main():
     loop = asyncio.get_event_loop()
     # result = loop.run_until_complete(login(username, password))
-    result = loop.run_until_complete(search("gravityWall"))
+    result = loop.run_until_complete(song_detail(482999012))
     loop.close()
 
 

@@ -1,2 +1,3 @@
 ---
-url: 'http://music.163.com'
+host: 'music.163.com'
+timeout: 10

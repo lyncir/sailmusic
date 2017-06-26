@@ -3,7 +3,12 @@ import os
 import json
 import base64
 import binascii
+import yaml
 from Crypto.Cipher import AES
+
+
+# 当前目录
+_basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 modulus = ('00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7'
@@ -42,3 +47,16 @@ def encrypted_request(text):
     encSecKey = rsaEncrypt(secKey, pubKey, modulus)
     data = {'params': encText, 'encSecKey': encSecKey}
     return data
+
+
+def config():
+    """
+    加载配置文件
+    """
+    file_path = os.path.join(_basedir, 'config.yml')
+    with open(file_path, 'rb') as f:
+        return yaml.load(f.read())
+
+
+if __name__ == '__main__':
+    print(config()['url'])

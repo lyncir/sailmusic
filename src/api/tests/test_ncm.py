@@ -3,7 +3,7 @@ import pytest
 import json
 
 from src.api.ncm import song_detail, search, user_playlist, \
-    playlist_detail, album
+    playlist_detail, album, music_url
 
 
 def test_user_playlist(loop):
@@ -24,6 +24,15 @@ def test_playlist_detail(loop):
     assert result['result']['trackCount'] == 4  # 4首歌曲
 
 
+def test_music_url(loop):
+    """
+    获取对应音乐的URL
+    """
+    result = loop.run_until_complete(music_url('1320301374'))
+    print(result)
+    assert 1 == 2
+
+
 def test_search(loop):
     """
     搜索
@@ -39,6 +48,8 @@ def test_song_detail(loop):
     歌曲明细
     """
     result = loop.run_until_complete(song_detail(482999012))
+    print(json.dumps(result))
+    assert 1 == 2
     assert result['code'] == 200  # 正常返回
     assert len(result['songs']) == 1  # 一首歌曲
     assert result['songs'][0]['id'] == 482999012  # 歌曲id相同

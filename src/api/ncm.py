@@ -34,7 +34,7 @@ class NCMActions(Enum):
     PLAYLIST_DETAIL = '/api/playlist/detail'  # OK
 
     # 获取对应音乐的URL
-    MUSIC_URL = '/weapi/song/enhance/player/url'
+    MUSIC_URL = '/api/music/url'
 
     # 搜索歌曲
     SEARCH = '/api/search/get'  # OK
@@ -124,6 +124,19 @@ def playlist_detail(playlist_id):
     """
     url = get_url(NCMActions.PLAYLIST_DETAIL.value)
     params = {"id": playlist_id}
+    connection = yield from http_request('GET', session, url,
+                                         params=params)
+    result = json.loads(connection)
+    return result
+
+
+@asyncio.coroutine
+def music_url(music_id):
+    """
+    获取对应音乐的URL
+    """
+    url = get_url(NCMActions.MUSIC_URL.value)
+    params = {"id": json.dumps([music_id])}
     connection = yield from http_request('GET', session, url,
                                          params=params)
     result = json.loads(connection)

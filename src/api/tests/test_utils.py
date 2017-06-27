@@ -9,4 +9,5 @@ def test_config():
     测试配置文件读取
     """
     result = config()
-    assert result == {'host': 'music.163.com'}
+    assert result['host'] == 'music.163.com'
+    assert result['timeout'] == 10

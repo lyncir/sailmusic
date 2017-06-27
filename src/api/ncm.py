@@ -31,7 +31,7 @@ class NCMActions(Enum):
     USER_PLAYLIST = '/api/user/playlist'  # OK
 
     # 获取歌单内所有音乐
-    PLAYLIST_DETAIL = '/weapi/v3/playlist/detail'
+    PLAYLIST_DETAIL = '/api/playlist/detail'  # OK
 
     # 获取对应音乐的URL
     MUSIC_URL = '/weapi/song/enhance/player/url'
@@ -43,13 +43,23 @@ class NCMActions(Enum):
     SONG_DETAIL = '/api/song/detail'  # OK
 
     # 获取专辑内容
-    ALBUM = '/weapi/v1/album/%s'
+    ALBUM = '/api/album/{}'  # OK
 
     # 私人 FM
     PERSONAL_FM = '/weapi/v1/radio/get'
 
 
 def get_or_post(method, session, url, data, json, params):
+    """
+    http请求
+
+    :param method: 请求方式 `GET` or `POST`
+    :param session: `requests` 的 `Session` 实例
+    :param url: 请求的url
+    :param data: post请求时使用的data数据
+    :param json: post请求时使用的json数据
+    :param params: get请求时使用的参数
+    """
 
     if method == 'POST':
         return session.post(url,
@@ -60,7 +70,7 @@ def get_or_post(method, session, url, data, json, params):
 
     elif method == 'GET':
         return session.get(url,
-                           params=params, 
+                           params=params,
                            headers=header,
                            timeout=config()['timeout'])
 
@@ -98,8 +108,22 @@ def user_playlist(uid, offset=0, limit=10):
     url = get_url(NCMActions.USER_PLAYLIST.value)
     params = {"uid": uid,
               "offset": offset,
-              "limit": limit,
-    }
+              "limit": limit}
+    connection = yield from http_request('GET', session, url,
+                                         params=params)
+    result = json.loads(connection)
+    return result
+
+
+@asyncio.coroutine
+def playlist_detail(playlist_id):
+    """
+    获取歌单内所有音乐
+
+    :param playlist_id: 歌单id
+    """
+    url = get_url(NCMActions.PLAYLIST_DETAIL.value)
+    params = {"id": playlist_id}
     connection = yield from http_request('GET', session, url,
                                          params=params)
     result = json.loads(connection)
@@ -134,12 +158,26 @@ def search(s, stype=1, offset=0, limit=10):
 def song_detail(music_id):
     """
     获取歌曲详情
+
+    :param music_id: 歌曲id
     """
     url = get_url(NCMActions.SONG_DETAIL.value)
     params = {"id": music_id,
-              "ids": json.dumps([music_id]),
-    }
+              "ids": json.dumps([music_id])}
     connection = yield from http_request('GET', session, url,
                                          params=params)
+    result = json.loads(connection)
+    return result
+
+
+@asyncio.coroutine
+def album(album_id):
+    """
+    获取专辑内容
+
+    :param album_id: 专辑id
+    """
+    url = get_url(NCMActions.ALBUM.value.format(album_id))
+    connection = yield from http_request('GET', session, url)
     result = json.loads(connection)
     return result

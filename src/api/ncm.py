@@ -2,9 +2,11 @@
 import json
 import asyncio
 import requests
+import random
 from enum import Enum
 
-from src.api.utils import config, get_url
+from src.api.utils import config, get_url, encrypted_id
+from src.api.encrypt import encrypted_request
 
 
 session = requests.Session()
@@ -16,6 +18,7 @@ header = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Host': config()['host'],
     'Referer': 'http://{}'.format(config()['host']),
+    'Cookie': 'appver=2.0.2;',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
 }
 
@@ -34,7 +37,7 @@ class NCMActions(Enum):
     PLAYLIST_DETAIL = '/api/playlist/detail'  # OK
 
     # 获取对应音乐的URL
-    MUSIC_URL = '/api/music/url'
+    MUSIC_URL = '/weapi/song/enhance/player/url'  # OK
 
     # 搜索歌曲
     SEARCH = '/api/search/get'  # OK
@@ -134,11 +137,16 @@ def playlist_detail(playlist_id):
 def music_url(music_id):
     """
     获取对应音乐的URL
+
+    :param music_id: 歌曲id
     """
     url = get_url(NCMActions.MUSIC_URL.value)
-    params = {"id": json.dumps([music_id])}
-    connection = yield from http_request('GET', session, url,
-                                         params=params)
+    data = {"ids": [music_id],
+            "br": 999000,
+            "cstf_token": ''}
+    data = encrypted_request(data)
+    connection = yield from http_request('POST', session, url,
+                                         data=data)
     result = json.loads(connection)
     return result
 

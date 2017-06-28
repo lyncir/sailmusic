@@ -1,3 +1,4 @@
 ---
 host: 'music.163.com'
 timeout: 10
+music_quality: 0  # 0: high 1: medium 2: low

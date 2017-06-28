@@ -11,3 +11,4 @@ def test_config():
     result = config()
     assert result['host'] == 'music.163.com'
     assert result['timeout'] == 10
+    assert result['music_quality'] == 0

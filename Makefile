@@ -10,7 +10,7 @@ iteration:=1
 rpmname:=$(Appname)-$(version)-$(iteration).$(arch).rpm
 #ssh_user:=nemo
 ssh_user:=root
-jolla_usb_ip:=192.168.20.161
+jolla_usb_ip:=192.168.1.20
 jolla_wifi_ip:=Jolla
 
 

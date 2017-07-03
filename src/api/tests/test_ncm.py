@@ -37,7 +37,7 @@ def test_search(loop):
     result = loop.run_until_complete(search('gravityWall',
                                             limit=1))
     assert result['code'] == 200  # 正常返回
-    assert result['result']['songCount'] == 7  # 搜索到7首
+    assert result['result']['songCount'] == 12  # 搜索到7首
 
 
 def test_song_detail(loop):

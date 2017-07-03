@@ -5,8 +5,8 @@ import requests
 import random
 from enum import Enum
 
-from src.api.utils import config, get_url, encrypted_id
-from src.api.encrypt import encrypted_request
+from .utils import config, get_url, encrypted_id
+from .encrypt import encrypted_request
 
 
 session = requests.Session()

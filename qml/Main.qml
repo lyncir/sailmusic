@@ -18,6 +18,12 @@ Page {
 		color: "#FFFFFF"
 	}
 
+	Label {
+		id: music
+
+		text: "URL: "
+	}
+
 	MediaPlayer {
 		id: playMusic	
 		source: "../src/media/Angel.mp3"
@@ -49,12 +55,17 @@ Page {
 
 			if (evaluate("os.uname().machine") == "armv7l"){
 				addImportPath(Qt.resolvedUrl('../src/pyPackages/pillow-armv7hl'));
+				addImportPath(Qt.resolvedUrl('../src/pyPackages/requests-armv7hl'));
 			} else {
 				addImportPath(Qt.resolvedUrl('../src/pyPackages/pillow-i686'));
 			}
 
 			setHandler('ip_address', function(newvalue) {
 				wlan0.text = "WLAN: " + newvalue;	
+			});
+
+			setHandler('music_url', function(newvalue) {
+				music.text = "URL: " + newvalue;	
 			});
 
 			importModule('main', function() {

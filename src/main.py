@@ -4,11 +4,15 @@ import io
 import socket
 import fcntl
 import struct
+import asyncio
 import logging
 import traceback
 
 import pyotherside
 from PIL import Image
+
+from api import ncm
+
 
 logging.basicConfig(filename='/tmp/sailmusic.log', level=logging.DEBUG)
 
@@ -60,6 +64,23 @@ def get_ip_address(ifname):
 
 
 pyotherside.send("ip_address", get_ip_address(b"wlan0"))
+
+
+def get_music_url(music_id):
+    """
+    获取音乐的url
+    """
+    try:
+        loop = asyncio.get_event_loop()
+        result = loop.run_until_complete(ncm.music_url(music_id))
+        loop.close()
+    except:
+        logging.info(traceback.format_exc())
+    logging.info(result)
+    return result['data'][0]['url']
+
+
+pyotherside.send("music_url", get_music_url('347230'))
 
 
 if __name__ == '__main__':

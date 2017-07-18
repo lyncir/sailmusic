@@ -82,7 +82,7 @@ Page {
                     anchors.centerIn: parent
                     fillMode: Image.PreserveAspectCrop
                     sourceSize.height: contentHeight
-                    source: "../images/" + iconSource
+                    source: "./images/" + iconSource
 
 //                    Rectangle {
 //                        anchors.fill: parent

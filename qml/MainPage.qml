@@ -34,11 +34,12 @@ Page {
         model: ListModel {
             id: modelIcons
 
-            ListElement { iconSource: "main_icon1.png"; iconText: "歌单" }
-            ListElement { iconSource: "main_icon2.png"; iconText: "私人FM" }
-            ListElement { iconSource: "main_icon3.png"; iconText: "专辑" }
-            ListElement { iconSource: "main_icon4.png"; iconText: "歌手" }
-            ListElement { iconSource: "main_icon5.png"; iconText: "本地音乐" }
+            ListElement { iconSource: "main_icon1.png"; iconText: "歌单"; iconUrl: "PlayListPage.qml" }
+            ListElement { iconSource: "main_icon2.png"; iconText: "私人FM"; iconUrl: "FMPage.qml" }
+            ListElement { iconSource: "main_icon3.png"; iconText: "专辑"; iconUrl: "AlbumPage.qml" }
+            ListElement { iconSource: "main_icon4.png"; iconText: "歌手"; iconUrl: "ArtistPage.qml" }
+            ListElement { iconSource: "main_icon5.png"; iconText: "本地音乐"; iconUrl: "LocalPage.qml" }
+            ListElement { iconSource: "main_icon5.png"; iconText: "测试页面"; iconUrl: "PlayingPanel.qml" }
         }
 
         //委派,即循环填充列表元素
@@ -46,6 +47,7 @@ Page {
             id: listItem
 
             contentHeight: Theme.itemSizeExtraSmall
+            onClicked: pageStack.push(iconUrl)
 
             //把一行切成两段,这是左半部分icon
             Item {
@@ -56,40 +58,14 @@ Page {
                 x: Theme.horizontalPageMargin
                 opacity: listItem.enabled ? 1.0 : 0.4
 
-                //创建一个矩形,透明
-//                Rectangle {
-//                    anchors.fill: parent
-//                    gradient: Gradient {
-//                        GradientStop {
-//                            position: 0.0
-//                            color: Theme.rgba(Theme.primaryColor, 0.1)
-//                        }
-//                        GradientStop {
-//                            position: 1.0
-//                            color: Theme.rgba(Theme.primaryColor, 0.05)
-//                        }
-//                    }
 
-//                    Image {
-//                        anchors.centerIn: parent
-//                        source: "../images/" + iconSource
-//                    }
-//                }
-
-                //上层遮罩
+                //图标图片
                 Image {
                     //anchors.fill: parent
                     anchors.centerIn: parent
                     fillMode: Image.PreserveAspectCrop
                     sourceSize.height: contentHeight
                     source: "./images/" + iconSource
-
-//                    Rectangle {
-//                        anchors.fill: parent
-//                        color: Theme.highlightBackgroundColor
-//                        opacity: Theme.highlightBackgroundOpacity
-//                        visible: listItem.highlighted
-//                    }
                 }
             }
 
@@ -103,6 +79,7 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
 
+                //文字
                 Label {
                     width: parent.width
                     opacity: listItem.enabled ? 1.0 : 0.4
